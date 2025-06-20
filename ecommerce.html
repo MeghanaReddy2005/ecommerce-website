@@ -3,223 +3,191 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Real Product Catalog</title>
+  <title>NLcart - Product Catalog</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background: #0d22e4;
     }
-    header {
-      padding: 1rem;
-      background: #f1ecec;
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0eaff, #ffffff);
+      color: #0d22e4;
+      min-height: 100vh;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      align-items: flex-start;
-      box-shadow: 0 2px 4px rgba(18, 144, 172, 0.784);
+      align-items: center;
     }
-    @media (min-width: 600px) {
-      header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
+
+    .top-box {
+      width: 90%;
+      max-width: 1000px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
-    header h1 {
-      margin: 0;
+
+    .top-box h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
-    header input, header select {
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 100%;
-      max-width: 300px;
-    }
-    main {
-      padding: 1rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+
+    .filters {
+      display: flex;
       gap: 1rem;
+      flex-wrap: wrap;
     }
-    .card {
-      background: rgb(195, 201, 203);
-      padding: 1rem;
+
+    input, select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      border: 1px solid #18171a;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s ease;
+      width: 200px;
     }
-    .card:hover {
-      transform: translateY(-5px);
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      width: 90%;
+      max-width: 1000px;
     }
-    .card img {
+
+    .product-card {
+      background: #f8f9ff;
+      border: 1px solid #d5e2ff;
+      border-radius: 12px;
+      width: 200px;
+      padding: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .product-card img {
       width: 100%;
-      height: auto;
-      border-radius: 4px;
+      height: 140px;
       object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
     }
-    .card h3 {
-      margin: 0.5rem 0 0.3rem;
+
+    .product-card h4 {
+      margin: 0.5rem 0;
       font-size: 1.1rem;
     }
-    .card p {
-      color: #333;
-      margin: 0.2rem 0;
+
+    .product-card p {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .product-card button {
+      background: #0d22e4;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .product-card button:hover {
+      background: #3f51d5;
+    }
+
+    .cart-total {
+      margin-top: 2rem;
+      font-weight: bold;
+      text-align: center;
+      color: #0a1f7c;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Real Product Catalog</h1>
-    <input type="text" id="searchInput" placeholder="Search products...">
-    <select id="categoryFilter">
-      <option value="all">All Categories</option>
-    </select>
-  </header>
+  <!-- Top Header Box -->
+  <div class="top-box">
+    <h2>🛍️ Product Catalog</h2>
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+      </select>
+    </div>
+  </div>
 
-  <main>
-    <div id="productGrid" class="grid"></div>
-  </main>
+  <!-- Product Grid -->
+  <div class="product-grid" id="productGrid"></div>
+
+  <!-- Cart Total -->
+  <div class="cart-total" id="cartTotal">Cart Total: $0.00</div>
 
   <script>
     const products = [
-      {
-        name: "Apple iPhone 14",
-        price: 9.99,
-        image: "https://m.media-amazon.com/images/I/618Bb+QzCmL._SX679_.jpg",
-        category: "Electronics"
-      },
-      {
-        name: "Sony WH-1000XM5 Headphones",
-        price: 19.79,
-        image: "https://m.media-amazon.com/images/I/41MPBNf3ePL._SX300_SY300_QL70_FMwebp_.jpg",
-        category: "Electronics"
-      },
-      {
-        name: "Nike Shoes",
-        price: 83.90,
-        image: "https://m.media-amazon.com/images/I/71O6djFBtsL._SY695_.jpg",
-        category: "Footwear"
-      },
-      {
-        name: "Fossil Men's Watch",
-        price: 29.98,
-        image: "https://m.media-amazon.com/images/I/71CUWtFsn+L._SX679_.jpg",
-        category: "Accessories"
-      },
-      {
-        name: "Keurig K-Supreme Coffee Maker",
-        price: 19.00,
-        image: "https://m.media-amazon.com/images/I/41hlJMj9BlL._SX300_SY300_QL70_FMwebp_.jpg",
-        category: "Appliances"
-      },
-      {
-        name: "Adidas Classic Backpack",
-        price: 28.00,
-        image: "https://m.media-amazon.com/images/I/81hpFNU+UWL._SX679_.jpg",
-        category: "Accessories"
-      },
-      {
-        name: "Samsung Galaxy S24",
-        price: 549.99,
-        image: "https://m.media-amazon.com/images/I/41X9qNxoJKL._SX300_SY300_QL70_FMwebp_.jpg",
-        category: "Electronics"
-      },
-      {
-        name: "Sony Tv",
-        price: 572.22,
-        image: "https://m.media-amazon.com/images/I/61yJWP8ovhL._AC_UY327_FMwebp_QL65_.jpg",
-        category: "Electronics"
-      },
-        {
-        name: "Washing Machine",
-        price: 572.22,
-        image: "https://m.media-amazon.com/images/I/41yXEuRSspL._SX342_SY445_QL70_FMwebp_.jpg",
-        category: "Electronics"
-      },
-      {
-        name: "Refridgerator",
-        price: 119.22,
-        image: "https://m.media-amazon.com/images/I/415mOaccS5L._SY445_SX342_QL70_FMwebp_.jpg",
-        category: "Electronics"
-      },
-      {
-        name: "Shirts",
-        price: 15.99,
-        image: "https://images-eu.ssl-images-amazon.com/images/I/61nrBPX2ATL._AC_UL600_SR600,400_.jpg",
-        category: "Clothing"
-      },
-      {
-        name: "Laptop",
-        price: 189.88,
-        image: "https://m.media-amazon.com/images/I/71RsD1QyfvL._AC_UL480_FMwebp_QL65_.jpg",
-        category: "Electronics"
-      },
-       {
-        name: "HandBag",
-        price: 19.65,
-        image: "https://m.media-amazon.com/images/I/71oW9ddfGsL._SY695_.jpg",
-        category: "Accessories"
-      },
-      {
-        name: "Buds",
-        price: 27.6,
-        image: "https://m.media-amazon.com/images/I/410ffQHVypL._SX300_SY300_QL70_FMwebp_.jpg",
-        category: "Electronics"
-      },
+      { name: "iPhone 14", price: 999, category: "Electronics", image: "https://m.media-amazon.com/images/I/618Bb+QzCmL._SX679_.jpg" },
+      { name: "Sony Headphones", price: 299, category: "Electronics", image: "https://m.media-amazon.com/images/I/41MPBNf3ePL._SX300_SY300_QL70_FMwebp_.jpg" },
+      { name: "Nike Shoes", price: 120, category: "Footwear", image: "https://m.media-amazon.com/images/I/71O6djFBtsL._SY695_.jpg" },
+      { name: "Fossil Watch", price: 199, category: "Accessories", image: "https://m.media-amazon.com/images/I/71CUWtFsn+L._SX679_.jpg" }
     ];
 
     const productGrid = document.getElementById("productGrid");
     const searchInput = document.getElementById("searchInput");
     const categoryFilter = document.getElementById("categoryFilter");
+    const cartTotal = document.getElementById("cartTotal");
 
-    function displayProducts(items) {
-      productGrid.innerHTML = items.map(product => `
-        <div class="card">
-          <img src="${product.image}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>$${product.price.toFixed(2)}</p>
-          <p><small>${product.category}</small></p>
+    let total = 0;
+
+    function displayProducts(list) {
+      productGrid.innerHTML = list.map(p => `
+        <div class="product-card">
+          <img src="${p.image}" alt="${p.name}" />
+          <h4>${p.name}</h4>
+          <p>$${p.price.toFixed(2)}</p>
+          <button onclick="addToCart(${p.price})">Buy Now</button>
         </div>
       `).join('');
     }
 
-    function populateCategories(items) {
-      const categories = [...new Set(items.map(p => p.category))];
+    function populateCategories() {
+      const categories = [...new Set(products.map(p => p.category))];
       categories.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        categoryFilter.appendChild(option);
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        categoryFilter.appendChild(opt);
       });
     }
 
     function filterProducts() {
-      const searchQuery = searchInput.value.toLowerCase();
-      const selectedCategory = categoryFilter.value;
-
-      const filtered = products.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery);
-        const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-      });
-
+      const q = searchInput.value.toLowerCase();
+      const cat = categoryFilter.value;
+      const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(q) &&
+        (cat === "all" || p.category === cat)
+      );
       displayProducts(filtered);
     }
 
-    // Initial load
-    populateCategories(products);
-    displayProducts(products);
+    function addToCart(price) {
+      total += price;
+      cartTotal.textContent = `Cart Total: $${total.toFixed(2)}`;
+    }
 
-    // Event listeners
+    // Init
+    populateCategories();
+    displayProducts(products);
     searchInput.addEventListener("input", filterProducts);
     categoryFilter.addEventListener("change", filterProducts);
   </script>
-
 </body>
 </html>
